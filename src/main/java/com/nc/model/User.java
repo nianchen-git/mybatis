@@ -1,24 +1,24 @@
 package com.nc.model;
 
 public class User {
-    private Integer id;
+    private String id;
     private String username;
     private String address;
 
     @Override
     public String toString() {
         return "User{" +
-                "id=" + id +
+                "id='" + id + '\'' +
                 ", username='" + username + '\'' +
                 ", address='" + address + '\'' +
-                '}';
+                '}'+"\n";
     }
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 
