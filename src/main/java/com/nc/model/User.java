@@ -1,9 +1,12 @@
 package com.nc.model;
 
+import java.util.List;
+
 public class User {
     private String id;
     private String username;
     private String address;
+    private List<String> favorites;
 
     @Override
     public String toString() {
@@ -11,7 +14,18 @@ public class User {
                 "id='" + id + '\'' +
                 ", username='" + username + '\'' +
                 ", address='" + address + '\'' +
+                ", favorites=" + favorites +
                 '}'+"\n";
+    }
+
+
+
+    public List<String> getFavorites() {
+        return favorites;
+    }
+
+    public void setFavorites(List<String> favorites) {
+        this.favorites = favorites;
     }
 
     public String getId() {
