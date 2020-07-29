@@ -3,8 +3,20 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.nc.mapper.UserMapper">
+
+    <resultMap id="UserMap" type="user">
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="address" property="address"/>
+        <result column="favorites" property="favorites"/>
+    </resultMap>
+
+    <sql id="User_Column">
+        id, username, address
+    </sql>
+
     <select id="queryUserById" resultType="com.nc.model.User">
-        select * from user where id = #{id}
+        select * from user where id = ${id}
     </select>
 
     <insert id="addUser" parameterType="com.nc.model.User">
@@ -30,10 +42,62 @@
     </delete>
 
     <update id="updateUserById" parameterType="user">
-        update user set username = #{username} where id = #{id}
+        update user
+        <set>
+            <if test="username != null">
+                username = #{username},
+            </if>
+            <if test="address != null">
+                address = #{address},
+            </if>
+            <if test="favorites != null">
+                favorites = #{favorites},
+            </if>
+        </set>
+        where id = #{id}
     </update>
 
-    <select id="queryUser" resultType="user">
+    <update id="updateUserById1" parameterType="string">
+        <!--update user set username = #{arg1} where id = #{arg0}-->
+        update user set username = #{param2} where id = #{param1}
+    </update>
+
+    <select id="queryUser" resultMap="UserMap">
         select * from user
+    </select>
+
+    <select id="queryUserByName" resultType="user">
+        <!--select * from user where username like '%${name}%'-->
+        select * from user where username like concat('%', #{username}, '%')
+    </select>
+
+    <select id="queryAllUser" resultType="user">
+        select * from user order by #{orderBy}
+    </select>
+
+    <select id="queryUserByPage" resultMap="UserMap">
+        select * from user
+        <if test="start != null and count != null">
+            limit #{start} , #{count}
+        </if>
+    </select>
+
+    <select id="queryUserByUsernameAndId" resultMap="UserMap">
+        select * from user
+        <where>
+            <if test="username!= null">
+                and username like concat('%',#{username},'%')
+            </if>
+            <if test="id != null">
+                and id > #{id}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryUserByIds" resultType="user">
+        select <include refid="User_Column"/> from user where id in
+        <foreach collection="array" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
     </select>
 </mapper>

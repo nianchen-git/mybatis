@@ -18,12 +18,47 @@ public class Main {
 //        helloWord();
 //        addUser();
 //        deleteUserById();
-//        updateUserById();
+        updateUserById();
 //        queryUser();
-        mapperXml();
+//        mapperXml();
 //        setHandler();
+//        ifpage();
+//        whereIdAndName();
+//        forEachByIds();
 
+    }
 
+    private static void forEachByIds() throws IOException {
+        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(Resources.getResourceAsStream("mybatis-config.xml"));
+        SqlSession sqlSession = sqlSessionFactory.openSession();
+        UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+        Integer[] ids = {1,2,3,4,5};
+        List<User> userList = userMapper.queryUserByIds(ids);
+        System.out.println(userList);
+        sqlSession.close();
+    }
+
+    private static void whereIdAndName() throws IOException {
+        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(Resources.getResourceAsStream("mybatis-config.xml"));
+        SqlSession sqlSession = sqlSessionFactory.openSession();
+        UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+        User user = new User();
+        user.setId("3");
+//        user.setUsername("三");
+        List<User> userList = userMapper.queryUserByUsernameAndId(user);
+        System.out.println(userList);
+        sqlSession.close();
+    }
+
+    private static void ifpage() {
+        SqlSessionFactory instance = SqlSessionFactoryUtils.getInstance("mybatis-config.xml");
+        SqlSession sqlSession = instance.openSession();
+        UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+        List<User> userList = userMapper.queryUserByPage(null,null);
+        System.out.println(userList);
+        List<User> userList1 = userMapper.queryUserByPage(1, 3);
+        System.out.println(userList1);
+        sqlSession.close();
     }
 
     private static void setHandler() {
@@ -49,6 +84,9 @@ public class Main {
         UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
         List<User> userList = userMapper.queryUser();
         System.out.println(userList);
+//        Integer update = userMapper.updateUserById1("2", "小松");
+//        System.out.println(update);
+        sqlSession.commit();
         sqlSession.close();
     }
 
@@ -65,8 +103,12 @@ public class Main {
         SqlSessionFactory sqlSessionFactory = SqlSessionFactoryUtils.getInstance("mybatis-config.xml");
         SqlSession sqlSession = sqlSessionFactory.openSession();
         User user = new User();
-        user.setId("2");
+        user.setId("6");
         user.setUsername("松松");
+        List<String> favorites = new ArrayList<>();
+        favorites.add("篮球");
+        favorites.add("LOL");
+        user.setFavorites(favorites);
         int update = sqlSession.update("com.nc.mapper.UserMapper.updateUserById", user);
         System.out.println(update);
         sqlSession.commit();
@@ -101,7 +143,7 @@ public class Main {
     private static void helloWord() throws IOException {
         SqlSessionFactory factory = new SqlSessionFactoryBuilder().build(Resources.getResourceAsStream("mybatis-config.xml"));
         SqlSession sqlSession = factory.openSession();
-        User user = sqlSession.selectOne("com.nc.mapper.UserMapper.queryUserById", 3);
+        User user = sqlSession.selectOne("com.nc.mapper.UserMapper.queryUserById", 7);
         System.out.println(user);
         sqlSession.close();
     }
