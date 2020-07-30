@@ -18,7 +18,7 @@ public class Main {
 //        helloWord();
 //        addUser();
 //        deleteUserById();
-        updateUserById();
+//        updateUserById();
 //        queryUser();
 //        mapperXml();
 //        setHandler();

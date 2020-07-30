@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nc.mapper.BookMapper">
+    <resultMap id="BookBaseMap" type="Book">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+    </resultMap>
+    <resultMap id="BookWithAuthor" type="Book" extends="BookBaseMap">
+        <association property="author" javaType="Author">
+            <id column="aid" property="id"/>
+            <result column="aname" property="name"/>
+            <result column="aage" property="age"/>
+        </association>
+    </resultMap>
+    <resultMap id="BookWithAuthorMap" type="Book" extends="BookBaseMap">
+        <association property="author" javaType="Author"
+                     select="com.nc.mapper.BookMapper.getAuthorById" column="aid" fetchType="lazy"/>
+    </resultMap>
+
+    <select id="getBookById" resultMap="BookWithAuthor">
+        select b.*, a.age as aage, a.id as aid, a.name as aname  from book b, author a where b.aid = a.id and b.id = #{id}
+    </select>
+    <select id="getBookById2" resultMap="BookWithAuthorMap">
+        select * from book where id = #{id}
+    </select>
+    <select id="getAuthorById" resultType="com.nc.model.Author">
+        select * from author where id = #{aid}
+    </select>
+    <select id="queryAllBook" resultMap="BookWithAuthorMap">
+        select * from book
+    </select>
+</mapper>
