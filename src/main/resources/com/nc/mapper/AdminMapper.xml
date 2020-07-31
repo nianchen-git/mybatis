@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nc.mapper.AdminMapper">
+    <resultMap id="AdminWithRole" type="Admin">
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <collection property="roles" ofType="Role">
+            <id column="rid" property="id"/>
+            <result column="rname" property="name"/>
+            <result column="rnameZh" property="nameZh"/>
+        </collection>
+    </resultMap>
+
+    <resultMap id="AdminWithRoleMap" type="Admin">
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <collection property="roles" ofType="Role"
+                    select="com.nc.mapper.AdminMapper.getRoleByAid" column="id" fetchType="lazy"/>
+    </resultMap>
+
+    <select id="getAdminById" resultMap="AdminWithRole">
+        select a.*, r.id rid, r.name rname, r.nameZh rnameZh from admin a, role r, admin_role ar
+        where a.id = ar.aid and r.id = ar.rid and ar.aid = #{id}
+    </select>
+    <select id="getAdminByIdToLazy" resultMap="AdminWithRoleMap">
+        select * from admin where id = #{id}
+    </select>
+    <select id="getRoleByAid" resultType="Role">
+        select r.* from role r, admin_role ar where r.id = ar.rid and ar.aid = #{id}
+    </select>
+</mapper>
