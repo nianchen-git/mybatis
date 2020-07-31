@@ -3,6 +3,10 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.nc.mapper.AdminMapper">
+    <!--二级缓存-->
+    <cache />
+    <!--需要实时显示的 在标签里加上userCache=false-->
+    <!--flushCache=false 不清空缓存 默认（查false,其他true）-->
     <resultMap id="AdminWithRole" type="Admin">
         <id column="id" property="id"/>
         <result column="username" property="username"/>

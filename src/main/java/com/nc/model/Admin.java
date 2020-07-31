@@ -1,8 +1,9 @@
 package com.nc.model;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Admin {
+public class Admin implements Serializable {
     private Integer id;
     private String username;
     private String password;
